@@ -3,9 +3,29 @@ console.log("test")
 
 var canvas = document.getElementById('game');
 var ctx = canvas.getContext('2d');
-//ctx.fillStyle = 'green';
-ctx.fillRect(100, 100, 30, 30);
-ctx.moveTo(200, 300)
+
+
+var x = canvas.width - 197;//テトリミノ位置の横軸
+var y = canvas.height / 30;//テトリミノ位置の縦軸
+var dx = 0;//テトロミノの移動傾き
+var dy = 1;//テトロミノの垂直移動速度
+
+function drawmino() {
+  ctx.beginPath();
+  ctx.rect(x, y, 33, 33);
+  ctx.fillStyle = "black";
+  ctx.fill();
+  ctx.closePath();
+}
+
+function draw() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  drawmino();
+  x += dx;
+  y += dy;
+}
+
+setInterval(draw, 10);
 
 /*
 
