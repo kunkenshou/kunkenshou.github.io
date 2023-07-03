@@ -1,31 +1,87 @@
 
-console.log("test")
+var canvas = document.getElementById('game');//HTMLからエレメント要素をを取得
+var ctx = canvas.getContext('2d');//エレメント要素からcanvasオブジェクトを生成
 
-var canvas = document.getElementById('game');
-var ctx = canvas.getContext('2d');
+var palyfield_width = 327;
+var palyfield_height = 630;
 
 
-var x = canvas.width - 197;//テトリミノ位置の横軸
-var y = canvas.height / 30;//テトリミノ位置の縦軸
-var dx = 0;//テトロミノの移動傾き
-var dy = 1;//テトロミノの垂直移動速度
+var minoRadius = 33;//短形の高さを別に定義。衝突検出用の値、衝突確認を値を使用してチェックする
+
+var x = canvas.width - 310;//テトリミノ位置の横軸 htmlで指定した27から310を引いた右端から17pxの位置から垂直移動するように指定
+var y = canvas.height - 597;//テトリミノ位置の縦軸 htmlで指定した、630から597を引いた上から33の位置から垂直移動するように指定
+var dx = 0;//テトロミノの水平の描画を0としている
+var dy = 1;//テトロミノの垂直の描画は1を指定
+
 
 function drawmino() {
-  ctx.beginPath();
-  ctx.rect(x, y, 33, 33);
-  ctx.fillStyle = "black";
-  ctx.fill();
-  ctx.closePath();
+  ctx.beginPath();//パスを呼び出し以下を短形を定義する
+  ctx.rect(x, y, minoRadius, 33);//X 座標 |  Y 座標 | 矩形の幅 | 矩形の高さ
+  ctx.fillStyle = "black";//短形の色
+  ctx.fill();//fillを使ってrectの図形を描画
+  ctx.closePath();//パスの呼び出し終了
 }
+
 
 function draw() {
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-  drawmino();
-  x += dx;
-  y += dy;
+  ctx.clearRect(0, 0, canvas.width, canvas.height);//描画をクリア
+  drawmino();//drawminoを実行
+
+  if (y + minoRadius >= palyfield_height) {
+    // テトロミノが衝突した場合の処理を記述する
+    // 例えば、テトロミノをフィールドに固定する処理や次のテトロミノの生成など
+    // ここではテトロミノの描画を止めるだけのサンプルコードを示します
+    return; // 描画を止めるために関数を終了する
+  }
+
+  /*
+    if (x + dx > canvas.width - minoRadius || x + dx < minoRadius) {
+      dx = -dx;//テトロミノの短形の高さが左右の辺にぶつかったらxを足す
+    }
+    if (y + dy > canvas.height - minoRadius || y + dy < minoRadius) {
+      dy = -dy;//テトロミノの短形の高さが上下の辺ぶつかったらyを足す
+    }
+  */
+
+
+  x += dx;//10ミリ秒ごとに水平が0づつたされていく
+  y += dy;//10ミリ秒ごとに垂直が1づつたされていく
+
+
+
 }
 
-setInterval(draw, 10);
+
+setInterval(draw, 10);//何度も同じ関数実行、オプションで10を指定すると、10ミリ秒ごとに実行される
+
+//当たり判定様の二次元配列
+//0から9までの列、0から19までの行
+const palyfield = [
+  [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
+  [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
+  [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
+  [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
+  [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
+  [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
+  [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
+  [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
+  [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
+  [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
+  [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
+  [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
+  [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
+  [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
+  [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
+  [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
+  [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
+  [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
+  [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
+  [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
+];
+
+console.log(`${palyfield.join('\n')}\n\n`);
+
+// キングの前のポーンを 2 つ前へ移動
 
 /*
 
@@ -86,5 +142,7 @@ fillRectオブジェクトをキーボードの操作で移動する。
 fillRectオブジェクトをキーボードの操作で回転する。
 playfieldの下に到着したら止まる。
 
+
+// const 
 
 */
